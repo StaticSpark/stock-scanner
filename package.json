@@ -1,0 +1,40 @@
+{
+  "name": "stock-scanner",
+  "version": "1.0.0",
+  "description": "Stock scanning application for stocks traded on Robinhood.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paul-trone/stock-scanner.git"
+  },
+  "author": "Paul Trone",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/paul-trone/stock-scanner/issues"
+  },
+  "homepage": "https://github.com/paul-trone/stock-scanner#readme",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "cli-table": "^0.3.1",
+    "command-line-args": "^4.0.7",
+    "csv-parse": "^1.2.1",
+    "ftp-get": "^0.3.1",
+    "inquirer": "^3.2.2",
+    "jetty": "^0.2.1",
+    "jsonfile": "^3.0.1",
+    "node-notifier": "^5.1.2",
+    "pace": "0.0.4",
+    "robinhood": "git+ssh://git@github.com/paul-trone/robinhood-node.git"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^7.2.3",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-latest": "^6.24.1",
+    "eslint": "^4.4.1"
+  }
+}
