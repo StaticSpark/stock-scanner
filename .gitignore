@@ -56,4 +56,7 @@ typings/
 
 # dotenv environment variables file
 .env
+
 rhSymbols.json
+0-0.5.json
+0.51-1.json

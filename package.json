@@ -4,7 +4,8 @@
   "description": "Stock scanning application for stocks traded on Robinhood.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node_modules/.bin/babel-node index.js"
   },
   "repository": {
     "type": "git",
@@ -21,12 +22,14 @@
     "cli-table": "^0.3.1",
     "command-line-args": "^4.0.7",
     "csv-parse": "^1.2.1",
+    "dotenv": "^4.0.0",
     "ftp-get": "^0.3.1",
     "inquirer": "^3.2.2",
     "jetty": "^0.2.1",
     "jsonfile": "^3.0.1",
     "node-notifier": "^5.1.2",
     "pace": "0.0.4",
+    "progress": "^2.0.0",
     "robinhood": "git+ssh://git@github.com/paul-trone/robinhood-node.git"
   },
   "devDependencies": {
@@ -35,6 +38,7 @@
     "babel-eslint": "^7.2.3",
     "babel-polyfill": "^6.26.0",
     "babel-preset-latest": "^6.24.1",
+    "babel-preset-stage-1": "^6.24.1",
     "eslint": "^4.4.1"
   }
 }
