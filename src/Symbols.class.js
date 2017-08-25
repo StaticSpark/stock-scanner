@@ -11,9 +11,9 @@ import * as sorting from './sorting';
 import { StocksTable } from './StocksTable.class';
 import { Utilities } from './Utilities.class';
 
+
 /**
- * Symbols
- * @TODO: build in progress bar
+ * Symbols - Description
  */
 export class Symbols {
   options;
@@ -23,7 +23,6 @@ export class Symbols {
   cachedFile;
   resultsFile;
   parsedSymbols;
-  // pace;
   stocks = [];
   fundamentalsBar;
   quoteBar;
@@ -45,7 +44,7 @@ export class Symbols {
       this.parsedSymbols = yield getRhSymbols();
     }
 
-    this.fundamentalsBar = new ProgressBar( 'Updating stocks [:bar] :percent :etas', {
+    this.fundamentalsBar = new ProgressBar( 'Updating stocks   [:bar] :percent :etas', {
       total : this.parsedSymbols.length / 10,
       complete : '=',
       incomplete : ' ',
@@ -116,7 +115,7 @@ export class Symbols {
 
     yield setCachedSymbols( symbols, this.cachedFile );
 
-    this.quoteBar = new ProgressBar( '      Retrieving quotes [:bar] :percent :etas', {
+    this.quoteBar = new ProgressBar( 'Retrieving quotes [:bar] :percent :etas', {
       total : this.stocks.length / 10,
       complete : '=',
       incomplete : ' ',

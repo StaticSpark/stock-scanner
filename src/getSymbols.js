@@ -1,4 +1,3 @@
-import ftp from 'ftp-get';
 import parse from 'csv-parse';
 import fs from 'fs';
 import bluebird from 'bluebird';
@@ -12,7 +11,7 @@ const getNext = ( url, symbols ) => {
       for ( let i = 0; i < res.results.length; i++ ) {
         symbols.push({ Symbol : res.results[i].symbol });
       }
-      
+
       if ( res.next ) {
         resolve( getNext( res.next, symbols ) );
       } else {
