@@ -13,7 +13,7 @@ import { Utilities } from './Utilities.class';
 
 /**
  * Symbols
- * @TODO: build in pace progress bar
+ * @TODO: build in progress bar
  */
 export class Symbols {
   options;
@@ -45,7 +45,7 @@ export class Symbols {
       this.parsedSymbols = yield getRhSymbols();
     }
 
-    this.fundamentalsBar = new ProgressBar( 'fundamentals [:bar] :percent :etas', {
+    this.fundamentalsBar = new ProgressBar( 'Updating stocks [:bar] :percent :etas', {
       total : this.parsedSymbols.length / 10,
       complete : '=',
       incomplete : ' ',
@@ -116,7 +116,7 @@ export class Symbols {
 
     yield setCachedSymbols( symbols, this.cachedFile );
 
-    this.quoteBar = new ProgressBar( '      quotes [:bar] :percent :etas', {
+    this.quoteBar = new ProgressBar( '      Retrieving quotes [:bar] :percent :etas', {
       total : this.stocks.length / 10,
       complete : '=',
       incomplete : ' ',
