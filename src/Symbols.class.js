@@ -4,6 +4,7 @@ import jsonfile from 'jsonfile';
 import ProgressBar from 'progress';
 
 import { cachedSymbols, cachedStockData, setCachedSymbols } from './cachedStockData';
+import { Cache } from './Cache.class';
 import { getRhSymbols } from './getSymbols';
 import { quoteData } from './robinhood';
 import * as sorting from './sorting';
@@ -11,9 +12,9 @@ import * as sorting from './sorting';
 import { StocksTable } from './StocksTable.class';
 import { Utilities } from './Utilities.class';
 
-
 /**
  * Symbols - Description
+ * @TODO: remove usage of all old cache functions.
  */
 export class Symbols {
   options;
@@ -26,6 +27,7 @@ export class Symbols {
   stocks = [];
   fundamentalsBar;
   quoteBar;
+  rewriteCache;
 
   constructor( options ) {
     this.options = options;
@@ -35,13 +37,23 @@ export class Symbols {
 
     this.cachedFile = `${this.min}-${this.max}.json`;
     this.resultsFile = 'allResults.json';
+    this.rewriteCache = false;
   }
 
-  *getParsed() {
-    this.parsedSymbols = yield cachedSymbols( this.cachedFile );
 
-    if ( this.parsedSymbols.length === 0 ) {
-      this.parsedSymbols = yield getRhSymbols();
+  /**
+   * getParsed - Retrieves the stocks and their data,
+   *             stores result to @property stocks.
+   */
+  async getParsed() {
+    // @TODO this is synchronous, should make async
+    Utilities.removeOldCache( this.cachedFile, 6 );
+    this.parsedSymbols = await Cache.readCache( this.cachedFile );
+
+    if ( ! this.parsedSymbols || this.parsedSymbols && this.parsedSymbols.length === 0 ) {
+      console.log( 'getting rh symbols' ); 
+      this.parsedSymbols = await getRhSymbols();
+      this.rewriteCache = true;
     }
 
     this.fundamentalsBar = new ProgressBar( 'Updating stocks   [:bar] :percent :etas', {
@@ -52,21 +64,24 @@ export class Symbols {
     });
 
     if ( this.clearCache ) {
-      yield this.updateSymbolData();
+      await this.updateSymbolData();
     } else {
-      this.stocks = yield cachedStockData();
+      console.log( 'setting stocks' );
+      this.stocks = await Cache.readCache( 'allResults.json' );
     }
   }
 
-  findParsedSymbols() {
-    return new Promise( ( resolve, reject ) => {
-      let _this = this;
-      bluebird.coroutine( function* () {
-        yield* _this.getParsed();
+  async findParsedSymbols() {
+    await this.getParsed();
 
-        resolve( true );
-      })();
-    });
+    // return new Promise( ( resolve, reject ) => {
+    //   let _this = this;
+    //   bluebird.coroutine( function* () {
+    //     yield* _this.getParsed();
+    //
+    //     resolve( true );
+    //   })();
+    // });
   }
 
   *updateSymbols() {
@@ -80,7 +95,10 @@ export class Symbols {
       this.fundamentalsBar.tick();
     }
 
-    this.writeCache();
+    // if ( this.rewriteCache ) {
+    console.log( `writing cache ${this.resultsFile}` );
+    Cache.writeCache( this.resultsFile, this.stocks );
+    // }
   }
 
   updateSymbolData() {
@@ -94,25 +112,18 @@ export class Symbols {
     });
   }
 
-  writeCache() {
-    jsonfile.writeFile( this.resultsFile, this.stocks, err => {
-      if ( err ) {
-        console.error( err );
-        process.exit(1);
-      }
-    });
-  }
-
   *sorted() {
     let quoteString;
     let quoteResult;
     let symbols;
 
     this.stocks = Utilities.filters( this.stocks, this.options );
+
     symbols = this.stocks.map( stock => {
       return { Symbol : stock.symbol };
     });
 
+    // Don't need to be updating these
     yield setCachedSymbols( symbols, this.cachedFile );
 
     this.quoteBar = new ProgressBar( 'Retrieving quotes [:bar] :percent :etas', {

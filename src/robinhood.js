@@ -153,7 +153,7 @@ export const getUrl = ( url ) => {
   return new Promise( ( resolve, reject ) => {
     bluebird.coroutine( function* () {
       const Robinhood = yield authenticated();
-
+      console.log( 'url', url ); 
       Robinhood.url( url, ( err, response, body ) => {
         if ( err || body === undefined ) {
           reject( err );

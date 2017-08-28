@@ -1,5 +1,8 @@
 import { fundamentals } from './robinhood';
 import bluebird from 'bluebird';
+import fs from 'fs';
+import path from 'path';
+const findRemoveSync = require('find-remove');
 
 export class Utilities {
   constructor() {
@@ -13,7 +16,7 @@ export class Utilities {
       .join(',');
   }
 
-  static filters( stocks, options ) {
+  static filters( stocks = [], options ) {
     return stocks.filter( ( obj ) => {
       if ( !options.clearCache ) { }
       if ( !obj ) return false;
@@ -42,5 +45,30 @@ export class Utilities {
         });
       })();
     });
+  }
+
+  static removeOldCache( file, hours) {
+    const fileWithPath = path.join( path.dirname(require.main.filename), file);
+    let stats;
+
+    if ( ! fs.existsSync( fileWithPath ) ) {
+      return;
+    }
+
+    try {
+      stats = fs.statSync( fileWithPath );
+    } catch ( err ) {
+      console.error( 'something went wrong', err );
+      return;
+    }
+    let endTime, now;
+    now = new Date().getTime();
+    endTime = new Date(stats.mtime).getTime() + 1000 * 60 * 60 * hours;
+
+    if ( now > endTime ) {
+      // delete file
+      console.log( `removing old cache file ${file}` );
+      fs.unlinkSync(  path.join( path.dirname( require.main.filename ), file ) );
+    }
   }
 }

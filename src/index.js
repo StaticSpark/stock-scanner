@@ -18,9 +18,9 @@ const showPrompt = () => {
     max = parseFloat( max );
 
     if ( clearCache.action === 'Yes' ) {
-      scan({ min : min, max : max, count : 10, sort : sorting.action, clearCache : true });
+      scan({ min : min, max : max, count : 20, sort : sorting.action, clearCache : true });
     } else {
-      scan({ min : min, max : max, count : 10, sort : sorting.action });
+      scan({ min : min, max : max, count : 20, sort : sorting.action });
     }
   })();
 };
